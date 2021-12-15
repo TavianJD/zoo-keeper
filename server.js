@@ -12,6 +12,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 //parse incoming json data
 app.use(express.json());
+app.use(express.static('./public/zookeepr-public'));
 
 function filterByQuery(query, animalsArray) {
     let personalityTraitsArray = [];
@@ -103,6 +104,22 @@ app.post('/api/animals', (req, res) => {
 
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepr-public/index.html'))
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepr-public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepr-public/zookeepers.html'));
+  });
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/zookeepr-public/index.html"));
+});
+
 function validateAnimal(animal) {
     if (!animal.name || typeof animal.name !== 'string') {
       return false;
@@ -121,5 +138,5 @@ function validateAnimal(animal) {
 
 app.listen(PORT, () => {
     console.log(`API sevrer now on port ${PORT}`)
-    console.log('http://localhost:3001/api/animals/')
+    console.log('http://localhost:3001')
 });
